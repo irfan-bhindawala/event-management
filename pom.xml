@@ -7,11 +7,13 @@
 	<packaging>pom</packaging>
 	<name>dw-parent</name>
 	<description>This is root/parent project of application</description>
-
+	<properties>
+<!-- 		<h2.version>1.4.188</h2.version> -->
+	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.8.RELEASE</version>
+		<version>1.5.1.RELEASE</version>
 	</parent>
 
 	<modules>
@@ -20,6 +22,14 @@
 		<module>dw-presentation-web</module>
 		<module>dw-service</module>
 	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.8</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

@@ -12,12 +12,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.dw.brd</groupId>
-			<artifactId>dw-persistence</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>dw-model</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.dw.brd</groupId>
-			<artifactId>dw-model</artifactId>
+			<artifactId>dw-persistence</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
