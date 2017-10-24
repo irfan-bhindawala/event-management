@@ -9,12 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.dw.brd.eventmanagement</groupId>
-    <artifactId>service</artifactId>
+    <groupId>org.dw.brd.event.management</groupId>
+    <artifactId>dw-web</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>org.dw.brd.eventmanagement</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -22,6 +23,5 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>
