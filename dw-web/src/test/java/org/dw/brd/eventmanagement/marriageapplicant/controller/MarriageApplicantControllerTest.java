@@ -1,5 +1,6 @@
 package org.dw.brd.eventmanagement.marriageapplicant.controller;
 
+import org.assertj.core.util.Lists;
 import org.dw.brd.eventmanagement.EventManagementApplication;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -14,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -58,20 +61,33 @@ public class MarriageApplicantControllerTest {
 
     @Test
     public void whenPostApplicantWithPartnerId_thenSaveApplicant() throws Exception {
+        Long alreadyPresent = loadTestApplicant(1).get(0);
         MarriageApplicant ma = createMarriageApplicant();
-        ma.setPartnerId(1L);
+        ma.setPartnerId(alreadyPresent);
         mvc.perform(post("/marriage-applicants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(ma)))
                 .andExpect(status().isOk()).andDo(print());
     }
 
-    private void loadTestApplicant(int iterations) {
+    @Test
+    public void whenPostApplicantWithInvalidPartnerId_then404() throws Exception {
+        MarriageApplicant ma = createMarriageApplicant();
+        ma.setPartnerId(1L);
+        mvc.perform(post("/marriage-applicants")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(ma)))
+                .andExpect(status().isNotFound()).andDo(print());
+    }
+
+    private List<Long> loadTestApplicant(int iterations) {
+        List<Long> maIds = Lists.newArrayList();
         for (; iterations > 0; iterations--) {
             MarriageApplicant ma = createMarriageApplicant();
-            repository.save(ma);
+            maIds.add(repository.save(ma).getId());
         }
         repository.flush();
+        return maIds;
     }
 
     private MarriageApplicant createMarriageApplicant() {

@@ -10,5 +10,5 @@ public interface MarriageApplicantService {
 
     List<MarriageApplicant> findAllApplicants();
 
-    Long createApplicant(MarriageApplicant applicant);
+    Long createApplicant(MarriageApplicant applicant) throws PartnerNotFoundException;
 }
