@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.dw.brd.eventmanagement.persistence.entity.MarriageApplicant;
 import org.dw.brd.eventmanagement.persistence.repository.MarriageApplicantRepository;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,8 +33,13 @@ public class MarriageApplicantControllerTest {
     @Autowired
     private MarriageApplicantRepository repository;
 
+    @After
+    public void clearData() {
+        repository.deleteAll();
+    }
+
     @Test
-    public void getAllApplicants() throws Exception {
+    public void whenGetAllApplicants_ThenReturnListOfMarriageApplicants() throws Exception {
         loadTestApplicant(3);
 
         mvc.perform(get("/marriage-applicants"))
@@ -41,12 +48,22 @@ public class MarriageApplicantControllerTest {
     }
 
     @Test
-    public void saveApplicant() throws Exception {
+    public void whenPostApplicant_thenSaveApplicant() throws Exception {
         MarriageApplicant ma = createMarriageApplicant();
         mvc.perform(post("/marriage-applicants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(ma)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    public void whenPostApplicantWithPartnerId_thenSaveApplicant() throws Exception {
+        MarriageApplicant ma = createMarriageApplicant();
+        ma.setPartnerId(1L);
+        mvc.perform(post("/marriage-applicants")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(ma)))
+                .andExpect(status().isOk()).andDo(print());
     }
 
     private void loadTestApplicant(int iterations) {
@@ -61,6 +78,7 @@ public class MarriageApplicantControllerTest {
         return MarriageApplicant.builder()
                 .firstName(RandomStringUtils.randomAlphabetic(5))
                 .lastName(RandomStringUtils.randomAlphabetic(5))
+                .address(RandomStringUtils.randomAlphanumeric(10))
                 .build();
     }
 
