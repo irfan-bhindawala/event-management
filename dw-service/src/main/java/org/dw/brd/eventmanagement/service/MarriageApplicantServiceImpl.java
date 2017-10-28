@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MarriageApplicantServiceImpl implements MarriageApplicantService {
@@ -23,8 +24,18 @@ public class MarriageApplicantServiceImpl implements MarriageApplicantService {
     }
 
     @Override
-    public Long createApplicant(MarriageApplicant applicant) {
+    public Long createApplicant(MarriageApplicant applicant) throws PartnerNotFoundException {
+        validatePartner(applicant);
         MarriageApplicant saved =  marriageApplicantRepository.saveAndFlush(applicant);
         return saved.getId();
+    }
+
+    private void validatePartner(MarriageApplicant applicant) throws PartnerNotFoundException {
+        if(applicant.getPartnerId() != null) {
+            MarriageApplicant partner = marriageApplicantRepository.findById(applicant.getPartnerId());
+            if(partner == null) {
+                throw new PartnerNotFoundException("The partner with ID " + applicant.getPartnerId() + " not found.");
+            }
+        }
     }
 }
