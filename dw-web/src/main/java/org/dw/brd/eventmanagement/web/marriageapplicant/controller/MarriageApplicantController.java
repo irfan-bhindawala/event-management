@@ -1,15 +1,21 @@
 package org.dw.brd.eventmanagement.web.marriageapplicant.controller;
 
 
+import java.net.URI;
+import java.util.List;
+
 import org.dw.brd.eventmanagement.persistence.entity.MarriageApplicant;
 import org.dw.brd.eventmanagement.service.MarriageApplicantService;
 import org.dw.brd.eventmanagement.service.PartnerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("marriage-applicants")
@@ -30,13 +36,14 @@ public class MarriageApplicantController {
     //TODO: Check if it is appropriate to have ResponseEntity<Object> as return type.
     // What are possible alternatives?
     @PostMapping
-    public ResponseEntity<Object> createApplicant(@RequestBody MarriageApplicant marriageApplicant) {
-        Long applicantId;
+    public ResponseEntity<?> createApplicant(@RequestBody MarriageApplicant marriageApplicant) {
         try {
-            applicantId = marriageApplicantService.createApplicant(marriageApplicant);
+            marriageApplicantService.createApplicant(marriageApplicant);
         } catch (PartnerNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.noContent().build();
         }
-        return new ResponseEntity<>(applicantId, HttpStatus.OK);
+        URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(location).build();
     }
 }

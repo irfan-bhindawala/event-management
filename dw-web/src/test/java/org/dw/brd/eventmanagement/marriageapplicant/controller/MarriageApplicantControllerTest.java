@@ -56,7 +56,7 @@ public class MarriageApplicantControllerTest {
         mvc.perform(post("/marriage-applicants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(ma)))
-                .andExpect(status().isOk()).andDo(print());
+                .andExpect(status().isCreated()).andDo(print());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class MarriageApplicantControllerTest {
         mvc.perform(post("/marriage-applicants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(ma)))
-                .andExpect(status().isOk()).andDo(print());
+                .andExpect(status().isCreated()).andDo(print());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class MarriageApplicantControllerTest {
         mvc.perform(post("/marriage-applicants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(ma)))
-                .andExpect(status().isNotFound()).andDo(print());
+                .andExpect(status().isNoContent()).andDo(print());
     }
 
     private List<Long> loadTestApplicant(int iterations) {
